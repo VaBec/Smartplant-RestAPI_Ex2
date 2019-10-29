@@ -11,7 +11,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using SmartPlantREST.Database;
 using SmartPlantREST.Repositories;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -30,9 +29,6 @@ namespace SmartPlantREST
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
-            //services.AddDbContext<DataBase>(options =>
-            //    options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new Info
