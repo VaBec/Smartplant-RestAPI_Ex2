@@ -22,7 +22,9 @@ namespace SmartPlantREST
             WebHost.CreateDefaultBuilder(args)
                 .UseUrls("https://*:5566")
                 .UseKestrel(options => {
-                    options.Listen(IPAddress.Parse("172.20.158.154"), 5080); //HTTP port
+                    //options.Listen(IPAddress.Parse("172.20.158.154"), 5080);
+                    options.Listen(IPAddress.Parse("192.168.178.121"), 5080);
+                    // http://192.168.178.121:5080/swagger/index.html
                 })
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
