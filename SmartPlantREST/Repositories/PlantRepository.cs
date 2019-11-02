@@ -56,7 +56,6 @@ namespace SmartPlantREST.Repositories
                 var plant = new Plant();
 
                 plant.MAC = model.MacAddress;
-                plant.UserName = model.UserName;
                 plant.Watervalue = model.Watervalue;
                 plant.Id = ObjectId.GenerateNewId().ToString();
 
