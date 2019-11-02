@@ -18,21 +18,27 @@ namespace SmartPlantREST.Controllers
             this.plantRepository = plantRepository;
         }
 
-        [HttpGet("/getplant")]
-        [Produces("application/json")]
-        [ProducesResponseType(typeof(PlantModel), (int) HttpStatusCode.OK)]
-        public ActionResult<IEnumerable<string>> GetPlantByID(string id)
-        {
-            var result = plantRepository.GetPlantbyID(id);
-            return this.Ok(result);
-        }
-
         [HttpPut("/addplant")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(RepositoryResult), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(RepositoryResult), (int)HttpStatusCode.OK)]
         public ActionResult AddPlant([FromBody] int val)
         {
             var result = plantRepository.AddPlantData(val);
+
+            if (result.Successful)
+            {
+                return this.Ok(result);
+            }
+
+            return this.BadRequest(result);
+        }
+
+        [HttpGet("/getallplants")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(RepositoryResult), (int)HttpStatusCode.OK)]
+        public ActionResult GetAllPlants()
+        {
+            var result = plantRepository.GetAllPlants();
 
             if (result.Successful)
             {
