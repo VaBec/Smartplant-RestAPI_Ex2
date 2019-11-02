@@ -49,25 +49,44 @@ namespace SmartPlantREST.Repositories
             var result = new RepositoryResult();
             result.Successful = true;
 
-            var tmp = plantService.GetPlantByMAC(model.MacAddress);
+            var oldPlant = plantService.GetPlantByMAC(model.MacAddress);
 
-            if(tmp == null)
+            var plant = new Plant();
+
+            plant.MAC = model.MacAddress;
+            plant.Watervalue = model.WaterValue;
+            plant.Id = ObjectId.GenerateNewId().ToString();
+
+            if (oldPlant == null)
             {
-                var plant = new Plant();
-
-                plant.MAC = model.MacAddress;
-                plant.Watervalue = model.Watervalue;
-                plant.Id = ObjectId.GenerateNewId().ToString();
-
                 plantService.Create(plant);
 
-                result.Payload = "Created new plant.";
+                result.Payload = "Created new plant with watervalue: '" + plant.Watervalue + "'.";
             }
             else
             {
-                plantService.Update(tmp.Id, tmp);
+                plantService.Update(plant, oldPlant);
 
-                result.Payload = "Updated plant.";
+                result.Payload = "Updated plant to watervalue: '" + plant.Watervalue + "'.";
+            }
+
+            return result;
+        }
+
+        public RepositoryResult GetWaterValueByMacAddress(string macAddress)
+        {
+            var result = new RepositoryResult();
+
+            var plant = plantService.GetPlantByMAC(macAddress);
+
+            if(plant == null)
+            {
+                result.Successful = false;
+                result.Payload = "Plant with macaddress '" + macAddress + "' does not exist.";
+            } else
+            {
+                result.Successful = true;
+                result.Payload = plant.Watervalue;
             }
 
             return result;

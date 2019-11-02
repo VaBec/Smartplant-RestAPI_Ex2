@@ -4,6 +4,6 @@
     {
         public string MacAddress { get; set; }
 
-        public int Watervalue { get; set; }
+        public int WaterValue { get; set; }
     }
 }

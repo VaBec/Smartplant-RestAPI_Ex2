@@ -62,5 +62,20 @@ namespace SmartPlantREST.Controllers
 
             return this.BadRequest(result);
         }
+
+        [HttpGet("/getwatervalue")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(RepositoryResult), (int)HttpStatusCode.OK)]
+        public ActionResult GetWaterValueByMac([FromQuery] string macAddress)
+        {
+            var result = plantRepository.GetWaterValueByMacAddress(macAddress);
+
+            if (result.Successful)
+            {
+                return this.Ok(result);
+            }
+
+            return this.BadRequest(result);
+        }
     }
 }

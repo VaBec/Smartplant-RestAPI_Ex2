@@ -34,8 +34,16 @@ namespace SmartPlantREST.PlantDB
             return plant;
         }
 
+        public void Update(Plant newPlant, Plant oldPlant)
+        {
+            Remove(oldPlant);
+            Create(newPlant);
+        }
+
+        
         public void Update(string id, Plant plantIn) =>
             _plants.ReplaceOne(plant => plant.Id == id, plantIn);
+        
 
         public void Remove(Plant plantIn) =>
             _plants.DeleteOne(plant => plant.Id == plantIn.Id);
