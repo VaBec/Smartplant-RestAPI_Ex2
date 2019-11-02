@@ -16,5 +16,7 @@ namespace SmartPlantREST.PlantDB
         public string MAC { get; set; }
 
         public string UserName { get; set; }
+
+        public int Watervalue { get; set; }
     }
 }

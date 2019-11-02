@@ -31,27 +31,45 @@ namespace SmartPlantREST.Repositories
             return result;
         }
 
-
-        public RepositoryResult AddPlant(PlantModel model)
+        public RepositoryResult DeleAllPlants()
         {
             var result = new RepositoryResult();
 
-            var plant = new Plant();
-            plant.MAC = model.MacAddress;
-            plant.UserName = model.UserName;
-            plant.Id = ObjectId.GenerateNewId().ToString();
+            result.Successful = true;
+            result.Payload = "Successfully deleted all plants.";
 
-            plantService.Create(plant);
+            plantService.Get().ForEach(p => plantService.Remove(p));
 
             return result;
         }
 
-        public RepositoryResult AddPlantData(long val)
+
+        public RepositoryResult UpdatePlant(PlantModel model)
         {
             var result = new RepositoryResult();
-
-            result.Payload = "Added value: '" + val + "'";
             result.Successful = true;
+
+            var tmp = plantService.GetPlantByMAC(model.MacAddress);
+
+            if(tmp == null)
+            {
+                var plant = new Plant();
+
+                plant.MAC = model.MacAddress;
+                plant.UserName = model.UserName;
+                plant.Watervalue = model.Watervalue;
+                plant.Id = ObjectId.GenerateNewId().ToString();
+
+                plantService.Create(plant);
+
+                result.Payload = "Created new plant.";
+            }
+            else
+            {
+                plantService.Update(tmp.Id, tmp);
+
+                result.Payload = "Updated plant.";
+            }
 
             return result;
         }

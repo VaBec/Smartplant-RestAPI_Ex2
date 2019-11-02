@@ -18,12 +18,12 @@ namespace SmartPlantREST.Controllers
             this.plantRepository = plantRepository;
         }
 
-        [HttpPut("/addplant")]
+        [HttpPut("/updateplant")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(RepositoryResult), (int)HttpStatusCode.OK)]
-        public ActionResult AddPlant([FromBody] int val)
+        public ActionResult UpdatePlant([FromBody] PlantModel plantModel)
         {
-            var result = plantRepository.AddPlantData(val);
+            var result = plantRepository.UpdatePlant(plantModel);
 
             if (result.Successful)
             {
@@ -39,6 +39,21 @@ namespace SmartPlantREST.Controllers
         public ActionResult GetAllPlants()
         {
             var result = plantRepository.GetAllPlants();
+
+            if (result.Successful)
+            {
+                return this.Ok(result);
+            }
+
+            return this.BadRequest(result);
+        }
+
+        [HttpDelete("/deleallplants")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(RepositoryResult), (int)HttpStatusCode.OK)]
+        public ActionResult DeleteAllPlants()
+        {
+            var result = plantRepository.DeleAllPlants();
 
             if (result.Successful)
             {

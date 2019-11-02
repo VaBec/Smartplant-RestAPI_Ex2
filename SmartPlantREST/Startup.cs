@@ -43,7 +43,7 @@ namespace SmartPlantREST
                 c.SwaggerDoc("v1", new Info
                 {
                     Version = "v1",
-                    Title = "Test API",
+                    Title = "SmartPlant API",
                     Description = "ASP.NET Core Web API"
                 });
             });

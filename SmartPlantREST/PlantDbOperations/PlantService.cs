@@ -23,7 +23,7 @@ namespace SmartPlantREST.PlantDB
         
 
         public List<Plant> Get() =>
-            _plants.Find(book => true).ToList();
+            _plants.Find(plant => true).ToList();
 
         public Plant Get(string id) =>
             _plants.Find<Plant>(plant => plant.Id == id).FirstOrDefault();
@@ -34,11 +34,11 @@ namespace SmartPlantREST.PlantDB
             return plant;
         }
 
-        public void Update(string id, Plant bookIn) =>
-            _plants.ReplaceOne(plant => plant.Id == id, bookIn);
+        public void Update(string id, Plant plantIn) =>
+            _plants.ReplaceOne(plant => plant.Id == id, plantIn);
 
-        public void Remove(Plant bookIn) =>
-            _plants.DeleteOne(plant => plant.Id == bookIn.Id);
+        public void Remove(Plant plantIn) =>
+            _plants.DeleteOne(plant => plant.Id == plantIn.Id);
 
         public void Remove(string id) =>
             _plants.DeleteOne(plant => plant.Id == id);
