@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SmartPlantREST.Repositories;
 
@@ -19,27 +18,21 @@ namespace SmartPlantREST.Controllers
             this.plantRepository = plantRepository;
         }
 
-        [HttpPut("/addplant")]
+        [HttpGet("/getplant")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(RepositoryResult), (int)HttpStatusCode.OK)]
-        public ActionResult Add([FromBody] PlantModel model)
+        [ProducesResponseType(typeof(PlantModel), (int) HttpStatusCode.OK)]
+        public ActionResult<IEnumerable<string>> GetPlantByID(string id)
         {
-            var result = plantRepository.AddPlant(model);
-
-            if (result.Successful)
-            {
-                return this.Ok(result);
-            }
-
-            return this.BadRequest(result);
+            var result = plantRepository.GetPlantbyID(id);
+            return this.Ok(result);
         }
 
-        [HttpGet("/getallplants")]
+        [HttpPut("/addplant")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(RepositoryResult), (int)HttpStatusCode.OK)]
-        public ActionResult GetAllPlants()
+        [ProducesResponseType(typeof(RepositoryResult), (int) HttpStatusCode.OK)]
+        public ActionResult AddPlant([FromBody] int val)
         {
-            var result = plantRepository.GetAllPlants();
+            var result = plantRepository.AddPlantData(val);
 
             if (result.Successful)
             {

@@ -36,7 +36,7 @@ namespace SmartPlantREST.Controllers
 
         [HttpPost("/login")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(RepositoryResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(RepositoryResult), (int) HttpStatusCode.OK)]
         public ActionResult Login([FromBody] UserModel model)
         {
             var result = userRepostiroy.Login(model);
@@ -51,7 +51,7 @@ namespace SmartPlantREST.Controllers
 
         [HttpPut("/adduser")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(RepositoryResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(RepositoryResult), (int) HttpStatusCode.OK)]
         public ActionResult Add([FromBody] UserModel model)
         {
             var result = userRepostiroy.AddUser(model);

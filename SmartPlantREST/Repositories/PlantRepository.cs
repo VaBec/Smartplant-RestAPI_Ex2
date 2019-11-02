@@ -45,5 +45,15 @@ namespace SmartPlantREST.Repositories
 
             return result;
         }
+
+        public RepositoryResult AddPlantData(long val)
+        {
+            var result = new RepositoryResult();
+
+            result.Payload = "Added value: '" + val + "'";
+            result.Successful = true;
+
+            return result;
+        }
     }
 }
