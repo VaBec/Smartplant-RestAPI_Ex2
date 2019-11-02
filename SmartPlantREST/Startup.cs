@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using SmartPlantREST.PlantDB;
 using SmartPlantREST.Repositories;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -28,7 +29,15 @@ namespace SmartPlantREST
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<PlantDatabaseSettings>(
+                Configuration.GetSection(nameof(PlantDatabaseSettings)));
+
+            services.AddSingleton<IPlantDatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<PlantDatabaseSettings>>().Value);
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddSingleton<PlantService>();
 
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new Info

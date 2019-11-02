@@ -2,8 +2,8 @@
 {
     public class PlantModel
     {
-        public string PlantName { get; set; }
+        public string MacAddress { get; set; }
 
-        public double GrownSize { get; set; }
+        public string UserName { get; set; }
     }
 }

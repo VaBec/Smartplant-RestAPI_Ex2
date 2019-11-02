@@ -1,17 +1,47 @@
-﻿using SmartPlantREST.Controllers;
-using System;
-using System.Threading.Tasks;
+﻿using System;
+using MongoDB.Bson;
+using SmartPlantREST.Controllers;
+using SmartPlantREST.PlantDB;
 
 namespace SmartPlantREST.Repositories
 {
     public class PlantRepository
     {
-        public PlantModel GetPlantbyID(string id)
+        private PlantService plantService;
+
+        public PlantRepository(PlantService plantService)
+        {
+            this.plantService = plantService;
+        }
+
+        public PlantModel GetPlantbyMAC(string mac)
         {
             var result = new PlantModel();
 
-            result.PlantName = "Baum";
-            result.GrownSize = 1.60;
+            return result;
+        }
+
+        public RepositoryResult GetAllPlants()
+        {
+            var result = new RepositoryResult();
+
+            result.Successful = true;
+            result.Payload = plantService.Get();
+
+            return result;
+        }
+
+
+        public RepositoryResult AddPlant(PlantModel model)
+        {
+            var result = new RepositoryResult();
+
+            var plant = new Plant();
+            plant.MAC = model.MacAddress;
+            plant.UserName = model.UserName;
+            plant.Id = ObjectId.GenerateNewId().ToString();
+
+            plantService.Create(plant);
 
             return result;
         }
