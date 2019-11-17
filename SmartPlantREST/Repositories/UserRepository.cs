@@ -79,36 +79,36 @@ namespace SmartPlantREST.DB
         }
 
 
-    public RepositoryResult LoginUser(RESTUserModel model)
-    {
-        var result = new RepositoryResult();
-
-        try
+        public RepositoryResult LoginUser(RESTUserModel model)
         {
-            var userDb = plantDb.GetCollection<UserModel>("user");
-            var user = userDb.Find(u => u.Name == model.Username && u.Password == model.Password).FirstOrDefault();
-            if (user == null)
+            var result = new RepositoryResult();
+
+            try
+            {
+                var userDb = plantDb.GetCollection<UserModel>("user");
+                var user = userDb.Find(u => u.Name == model.Username && u.Password == model.Password).FirstOrDefault();
+                if (user == null)
+                {
+                    result.Successful = false;
+                    result.Payload = $"Cant login user '{model.Username}'";
+                }
+                else
+                {
+                    result.Successful = true;
+                    result.Payload = $"Successfully logged in user '{model.Username}'";
+                }
+            }
+            catch (Exception e)
             {
                 result.Successful = false;
-                result.Payload = $"Cant login user '{model.Username}'";
+                result.Payload = e.Message;
             }
-            else
+
+            return result;
+            }
+
+            public RepositoryResult GetUser(string name)
             {
-                result.Successful = true;
-                result.Payload = $"Successfully logged in user '{model.Username}'";
-            }
-        }
-        catch (Exception e)
-        {
-            result.Successful = false;
-            result.Payload = e.Message;
-        }
-
-        return result;
-        }
-
-        public RepositoryResult GetUser(string name)
-        {
             var result = new RepositoryResult();
 
             try

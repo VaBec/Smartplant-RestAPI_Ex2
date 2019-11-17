@@ -29,5 +29,20 @@ namespace SmartPlantREST.Controllers
 
             return this.BadRequest(result);
         }
+
+        [HttpGet("/plantsfromuser")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(RepositoryResult), (int)HttpStatusCode.OK)]
+        public ActionResult GetPlantsFromUser(string userName)
+        {
+            var result = plantRepository.GetPlantsFromUser(userName);
+
+            if (result.Successful)
+            {
+                return this.Ok(result);
+            }
+
+            return this.BadRequest(result);
+        }
     }
 }

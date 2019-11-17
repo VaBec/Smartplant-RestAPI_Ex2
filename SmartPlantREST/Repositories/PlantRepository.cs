@@ -15,6 +15,34 @@ namespace SmartPlantREST.Repositories
             plantDb = db.GetPlantDb();
         }
 
+        public RepositoryResult GetPlantsFromUser(string userName)
+        {
+            var result = new RepositoryResult();
+            result.Successful = true;
+
+            try
+            {
+                var plants = plantDb.GetCollection<PlantModel>("plant");
+                var usersPlants = plants.Find(p => p.Owner == userName).ToList();
+                foreach(PlantModel plant in usersPlants)
+                {
+                    var dt = plant.TimeStamp;
+                    DateTime date = DateTime.Parse(dt);
+                    DateTime newDate = new DateTime(date.Year, date.Month, date.Day, date.Hour + 1, date.Minute, date.Second);
+                    plant.TimeStamp = newDate.ToString();
+                }
+
+                result.Payload = usersPlants;
+            }
+            catch(Exception e)
+            {
+                result.Successful = false;
+                result.Payload = e.Message;
+            }
+
+            return result;
+        }
+
         public RepositoryResult UpdatePlant(RESTPlantUpdateModel plantModel)
         {
             var result = new RepositoryResult();
