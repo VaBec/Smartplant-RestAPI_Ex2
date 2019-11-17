@@ -1,93 +1,63 @@
 ﻿using System;
 using MongoDB.Bson;
+using MongoDB.Driver;
 using SmartPlantREST.Controllers;
+using SmartPlantREST.DB;
 
 namespace SmartPlantREST.Repositories
 {
     public class PlantRepository
     {
-        public PlantRepository()
+        private IMongoDatabase plantDb;
+
+        public PlantRepository(MongoDbContext db)
         {
+            plantDb = db.GetPlantDb();
         }
 
-        public PlantModel GetPlantbyMAC(string mac)
-        {
-            var result = new PlantModel();
-
-            return result;
-        }
-
-        public RepositoryResult GetAllPlants()
+        public RepositoryResult UpdatePlant(RESTPlantUpdateModel plantModel)
         {
             var result = new RepositoryResult();
 
-            result.Successful = true;
-            //result.Payload = plantService.Get();
-
-            return result;
-        }
-
-        public RepositoryResult DeleAllPlants()
-        {
-            var result = new RepositoryResult();
-
-            result.Successful = true;
-            result.Payload = "Successfully deleted all plants.";
-
-            //plantService.Get().ForEach(p => plantService.Remove(p));
-
-            return result;
-        }
-
-
-        public RepositoryResult UpdatePlant(PlantModel model)
-        {
-            var result = new RepositoryResult();
-            
-            result.Successful = true;
-
-            /*
-            var oldPlant = plantService.GetPlantByMAC(model.MacAddress);
-
-            var plant = new Plant();
-
-            plant.MAC = model.MacAddress;
-            plant.Watervalue = model.WaterValue;
-            plant.Id = ObjectId.GenerateNewId().ToString();
-
-            if (oldPlant == null)
+            try
             {
-                plantService.Create(plant);
+                var plants = plantDb.GetCollection<PlantModel>("plant");
+                var plant = plants.Find(p => p.MacAddress == plantModel.MacAddress).FirstOrDefault();
 
-                result.Payload = "Created new plant with watervalue: '" + plant.Watervalue + "'.";
+                if (plant == null)
+                {
+                    var newPlant = new PlantModel();
+                    newPlant.Id = ObjectId.GenerateNewId().ToString();
+                    newPlant.MacAddress = plantModel.MacAddress;
+                    newPlant.Owner = plantModel.Owner;
+                    newPlant.Watervalue = plantModel.WaterValue;
+                    newPlant.PlantType = (int)plantModel.PlantType;
+                    newPlant.TimeStamp = DateTime.Now.ToString();
+
+                    plants.InsertOne(newPlant);
+                }
+                else
+                {
+                    var newPlant = new PlantModel();
+                    newPlant.Id = ObjectId.GenerateNewId().ToString();
+                    newPlant.MacAddress = plantModel.MacAddress;
+                    newPlant.Owner = plantModel.Owner;
+                    newPlant.Watervalue = plantModel.WaterValue;
+                    newPlant.PlantType = (int)plantModel.PlantType;
+                    newPlant.TimeStamp = DateTime.Now.ToString();
+
+                    plants.DeleteOne(p => p.MacAddress == plantModel.MacAddress);
+                    plants.InsertOne(newPlant);
+                }
+
+                result.Successful = true;
+                result.Payload = "Successfully updated plant.";
             }
-            else
-            {
-                plantService.Update(plant, oldPlant);
-
-                result.Payload = "Updated plant to watervalue: '" + plant.Watervalue + "'.";
-            }
-            */
-            return result;
-        }
-
-        public RepositoryResult GetWaterValueByMacAddress(string macAddress)
-        {
-            var result = new RepositoryResult();
-
-            /*
-            var plant = plantService.GetPlantByMAC(macAddress);
-
-            if(plant == null)
+            catch (Exception e)
             {
                 result.Successful = false;
-                result.Payload = "Plant with macaddress '" + macAddress + "' does not exist.";
-            } else
-            {
-                result.Successful = true;
-                result.Payload = plant.Watervalue;
+                result.Payload = e.Message;
             }
-            */
             return result;
         }
     }

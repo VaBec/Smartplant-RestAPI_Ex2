@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SmartPlantREST.DB;
+using SmartPlantREST.Repositories;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace SmartPlantREST
@@ -35,6 +36,7 @@ namespace SmartPlantREST
             var mongoContext = new MongoDbContext();
             services.AddSingleton<MongoDbContext>(mongoContext);
             services.AddTransient<UserRepository>();
+            services.AddTransient<PlantRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

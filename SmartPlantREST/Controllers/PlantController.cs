@@ -18,54 +18,9 @@ namespace SmartPlantREST.Controllers
         [HttpPut("/updateplant")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(RepositoryResult), (int)HttpStatusCode.OK)]
-        public ActionResult UpdatePlant([FromBody] PlantModel plantModel)
+        public ActionResult UpdatePlant([FromBody] RESTPlantUpdateModel plantModel)
         {
             var result = plantRepository.UpdatePlant(plantModel);
-
-            if (result.Successful)
-            {
-                return this.Ok(result);
-            }
-
-            return this.BadRequest(result);
-        }
-
-        [HttpGet("/getallplants")]
-        [Produces("application/json")]
-        [ProducesResponseType(typeof(RepositoryResult), (int)HttpStatusCode.OK)]
-        public ActionResult GetAllPlants()
-        {
-            var result = plantRepository.GetAllPlants();
-
-            if (result.Successful)
-            {
-                return this.Ok(result);
-            }
-
-            return this.BadRequest(result);
-        }
-
-        [HttpDelete("/deleallplants")]
-        [Produces("application/json")]
-        [ProducesResponseType(typeof(RepositoryResult), (int)HttpStatusCode.OK)]
-        public ActionResult DeleteAllPlants()
-        {
-            var result = plantRepository.DeleAllPlants();
-
-            if (result.Successful)
-            {
-                return this.Ok(result);
-            }
-
-            return this.BadRequest(result);
-        }
-
-        [HttpGet("/getwatervalue")]
-        [Produces("application/json")]
-        [ProducesResponseType(typeof(RepositoryResult), (int)HttpStatusCode.OK)]
-        public ActionResult GetWaterValueByMac([FromQuery] string macAddress)
-        {
-            var result = plantRepository.GetWaterValueByMacAddress(macAddress);
 
             if (result.Successful)
             {
