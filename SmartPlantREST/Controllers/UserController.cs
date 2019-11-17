@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using SmartPlantREST.DB;
+using SmartPlantREST.Models;
 using SmartPlantREST.Repositories;
 
 namespace SmartPlantREST.Controllers
@@ -19,12 +21,12 @@ namespace SmartPlantREST.Controllers
             this.userRepostiroy = userRepostiroy;
         }
 
-        [HttpPost("/register")]
+        [HttpGet("/getallusers")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(string), (int) HttpStatusCode.OK)]
-        public ActionResult<IEnumerable<string>> Register(UserModel model)
+        [ProducesResponseType(typeof(RepositoryResult), (int)HttpStatusCode.OK)]
+        public ActionResult GetAllUsers()
         {
-            var result = userRepostiroy.Register(model);
+            var result = userRepostiroy.GetUsers();
 
             if (result.Successful)
             {
@@ -37,9 +39,9 @@ namespace SmartPlantREST.Controllers
         [HttpPost("/login")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(RepositoryResult), (int) HttpStatusCode.OK)]
-        public ActionResult Login([FromBody] UserModel model)
+        public ActionResult Login([FromBody] RESTUserModel model)
         {
-            var result = userRepostiroy.Login(model);
+            var result = userRepostiroy.LoginUser(model);
 
             if(result.Successful)
             {
@@ -49,12 +51,12 @@ namespace SmartPlantREST.Controllers
             return this.BadRequest(result);
         }
 
-        [HttpPut("/adduser")]
+        [HttpPut("/register")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(RepositoryResult), (int) HttpStatusCode.OK)]
-        public ActionResult Add([FromBody] UserModel model)
+        public ActionResult RegisterUser([FromBody] RESTUserModel model)
         {
-            var result = userRepostiroy.AddUser(model);
+            var result = userRepostiroy.Register(model);
 
             if (result.Successful)
             {

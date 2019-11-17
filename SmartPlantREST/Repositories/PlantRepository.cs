@@ -1,17 +1,13 @@
 ﻿using System;
 using MongoDB.Bson;
 using SmartPlantREST.Controllers;
-using SmartPlantREST.PlantDB;
 
 namespace SmartPlantREST.Repositories
 {
     public class PlantRepository
     {
-        private PlantService plantService;
-
-        public PlantRepository(PlantService plantService)
+        public PlantRepository()
         {
-            this.plantService = plantService;
         }
 
         public PlantModel GetPlantbyMAC(string mac)
@@ -26,7 +22,7 @@ namespace SmartPlantREST.Repositories
             var result = new RepositoryResult();
 
             result.Successful = true;
-            result.Payload = plantService.Get();
+            //result.Payload = plantService.Get();
 
             return result;
         }
@@ -38,7 +34,7 @@ namespace SmartPlantREST.Repositories
             result.Successful = true;
             result.Payload = "Successfully deleted all plants.";
 
-            plantService.Get().ForEach(p => plantService.Remove(p));
+            //plantService.Get().ForEach(p => plantService.Remove(p));
 
             return result;
         }
@@ -47,8 +43,10 @@ namespace SmartPlantREST.Repositories
         public RepositoryResult UpdatePlant(PlantModel model)
         {
             var result = new RepositoryResult();
+            
             result.Successful = true;
 
+            /*
             var oldPlant = plantService.GetPlantByMAC(model.MacAddress);
 
             var plant = new Plant();
@@ -69,7 +67,7 @@ namespace SmartPlantREST.Repositories
 
                 result.Payload = "Updated plant to watervalue: '" + plant.Watervalue + "'.";
             }
-
+            */
             return result;
         }
 
@@ -77,6 +75,7 @@ namespace SmartPlantREST.Repositories
         {
             var result = new RepositoryResult();
 
+            /*
             var plant = plantService.GetPlantByMAC(macAddress);
 
             if(plant == null)
@@ -88,7 +87,7 @@ namespace SmartPlantREST.Repositories
                 result.Successful = true;
                 result.Payload = plant.Watervalue;
             }
-
+            */
             return result;
         }
     }
