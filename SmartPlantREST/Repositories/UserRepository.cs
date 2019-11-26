@@ -15,6 +15,45 @@ namespace SmartPlantREST.DB
             plantDb = db.GetPlantDb();
         }
 
+        public RepositoryResult Delete(RESTUserModel model)
+        {
+            var result = new RepositoryResult();
+
+            try
+            {
+                var userDb = plantDb.GetCollection<UserModel>("user");
+                var user = userDb.Find(u => u.Name == model.Username).FirstOrDefault();
+
+                if (user == null)
+                {
+                    result.Successful = false;
+                    result.Payload = "Could not find user with name " + model.Username;
+                }
+                else
+                {
+                    if (user.Password == model.Password)
+                    {
+                        userDb.DeleteOne(u => u.Name == model.Username);
+
+                        result.Successful = true;
+                        result.Payload = "Successfully deleted user.";
+                    }
+                    else
+                    {
+                        result.Successful = false;
+                        result.Payload = "Wrong password.";
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                result.Successful = false;
+                result.Payload = e.Message;
+            }
+
+            return result;
+        }
+
         public RepositoryResult Register(RESTUserModel model)
         {
             var result = new RepositoryResult();

@@ -65,5 +65,20 @@ namespace SmartPlantREST.Controllers
 
             return this.BadRequest(result);
         }
+
+        [HttpDelete("/deleteuser")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(RepositoryResult), (int)HttpStatusCode.OK)]
+        public ActionResult DeleteUser([FromBody] RESTUserModel model)
+        {
+            var result = userRepostiroy.Delete(model);
+
+            if (result.Successful)
+            {
+                return this.Ok(result);
+            }
+
+            return this.BadRequest(result);
+        }
     }
 }
