@@ -3,16 +3,19 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using SmartPlantREST.Controllers;
 using SmartPlantREST.DB;
+using SmartPlantREST.Models;
 
 namespace SmartPlantREST.Repositories
 {
     public class PlantRepository
     {
         private IMongoDatabase plantDb;
+        private IUserRepository userRepository;
 
-        public PlantRepository(MongoDbContext db)
+        public PlantRepository(MongoDbContext db, UserRepository userRepository)
         {
             plantDb = db.GetPlantDb();
+            this.userRepository = userRepository;
         }
 
         public RepositoryResult GetPlantsFromUser(string userName)
@@ -43,7 +46,64 @@ namespace SmartPlantREST.Repositories
             return result;
         }
 
-        public RepositoryResult UpdatePlant(RESTPlantUpdateModel plantModel)
+        public RepositoryResult DeletePlant(RESTPlantDeleteModel plantModel)
+        {
+            var result = new RepositoryResult();
+
+            try
+            {
+                var plants = plantDb.GetCollection<PlantModel>("plant");
+                var plant = plants.Find(p => p.Id == plantModel.Id).FirstOrDefault();
+
+                if(plant == null)
+                {
+                    result.Successful = false;
+                    result.Payload = "Plant with ID " + plantModel.Id + " does not exist."; 
+                }
+                else
+                {
+                    if (plant.Owner == plantModel.Username)
+                    {
+
+                        var user = userRepository.GetUserByName(plantModel.Username);
+
+                        if(user == null)
+                        {
+                            result.Successful = false;
+                            result.Payload = "Could not find user: " + plantModel.Username;
+                        }
+                        else
+                        {
+                            if (user.Password == plantModel.Password)
+                            {
+                                result.Successful = true;
+                                result.Payload = "Successfully deleted plant";
+                                plants.DeleteOne(p => p.Id == plantModel.Id);
+                            }
+                            else
+                            {
+                                result.Successful = false;
+                                result.Payload = "Wrong password!";
+                            }
+                        }
+                    }
+                    else
+                    {
+                        result.Successful = false;
+                        result.Payload = "The user " + plantModel.Username + " does not own this plant.";
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                result.Successful = false;
+                result.Payload = "Error while deleting plant: " + e.Message;
+            }
+
+            return result;
+        }
+
+        public RepositoryResult UpdatePlant(RESTPlantModel plantModel)
         {
             var result = new RepositoryResult();
 

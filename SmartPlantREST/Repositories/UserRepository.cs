@@ -196,9 +196,10 @@ namespace SmartPlantREST.DB
             return result;
         }
 
-        public RepositoryResult Update(RESTUserModel user)
+        public UserModel GetUserByName(string userName)
         {
-            throw new System.NotImplementedException();
+            var userDb = plantDb.GetCollection<UserModel>("user");
+            return userDb.Find(u => u.Name == userName).FirstOrDefault();
         }
     }
 }

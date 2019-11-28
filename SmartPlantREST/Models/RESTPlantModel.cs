@@ -1,6 +1,6 @@
 ﻿namespace SmartPlantREST.Controllers
 {
-    public class RESTPlantUpdateModel
+    public class RESTPlantModel
     {
         public string MacAddress { get; set; }
 

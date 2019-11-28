@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Mvc;
+using SmartPlantREST.Models;
 using SmartPlantREST.Repositories;
 
 namespace SmartPlantREST.Controllers
@@ -18,9 +19,24 @@ namespace SmartPlantREST.Controllers
         [HttpPut("/updateplant")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(RepositoryResult), (int)HttpStatusCode.OK)]
-        public ActionResult UpdatePlant([FromBody] RESTPlantUpdateModel plantModel)
+        public ActionResult UpdatePlant([FromBody] RESTPlantModel plantModel)
         {
             var result = plantRepository.UpdatePlant(plantModel);
+
+            if (result.Successful)
+            {
+                return this.Ok(result);
+            }
+
+            return this.BadRequest(result);
+        }
+
+        [HttpDelete("/deleteplant")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(RepositoryResult), (int)HttpStatusCode.OK)]
+        public ActionResult DeletePlant([FromBody] RESTPlantDeleteModel plantModel)
+        {
+            var result = plantRepository.DeletePlant(plantModel);
 
             if (result.Successful)
             {
